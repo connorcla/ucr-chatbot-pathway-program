@@ -27,11 +27,6 @@ def client(app: Flask):
 
 
 @pytest.fixture
-def runner(app: Flask):
-    return app.test_cli_runner()
-
-
-@pytest.fixture
 def db(app: Flask):
     
     load_dotenv()
