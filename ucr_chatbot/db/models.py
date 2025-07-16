@@ -9,7 +9,7 @@ from sqlalchemy import (
     Enum,
     Boolean,
     ARRAY,
-    Float
+    Float,
 )
 from sqlalchemy.orm import declarative_base, mapped_column, relationship, Session
 import enum
@@ -140,7 +140,7 @@ class Embeddings(base):
 
     __tablename__ = "Embeddings"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    vector = mapped_column(ARRAY(Float)) # replace with Vector later
+    vector = mapped_column(ARRAY(Float))  # replace with Vector later
     segment_id = Column(Integer, ForeignKey("Segments.id"), nullable=False)
 
     segment = relationship("Segments", back_populates="embeddings")
@@ -157,6 +157,7 @@ class References(base):
 def initialize_db():
     base.metadata.create_all(engine)
     print("Datatbase initialized.")
+
 
 def clear_db():
     base.metadata.drop_all(engine)
@@ -265,6 +266,7 @@ def print_users():
             rows.append((row.email, row.first_name, row.last_name))
         print(tabulate(rows, headers="keys", tablefmt="psql"))
 
+
 def print_courses():
     """Prints all users and their information"""
     with Session(engine) as session:
@@ -274,6 +276,7 @@ def print_courses():
         for row in all_entries:
             rows.append((row.id, row.name))
         print(tabulate(rows, headers="keys", tablefmt="psql"))
+
 
 def print_participation():
     """Prints all relationships between users and courses"""
@@ -285,6 +288,7 @@ def print_participation():
             rows.append((row.email, row.course_id, row.role))
         print(tabulate(rows, headers="keys", tablefmt="psql"))
 
+
 def print_documents():
     """Prints all documents instances"""
     with Session(engine) as session:
@@ -294,6 +298,7 @@ def print_documents():
         for row in all_entries:
             rows.append((row.file_path, row.course_id, row.is_active))
         print(tabulate(rows, headers="keys", tablefmt="psql"))
+
 
 def print_segments():
     """Prints all segments instances"""
@@ -305,6 +310,7 @@ def print_segments():
             rows.append((row.id, row.text, row.document_id))
         print(tabulate(rows, headers="keys", tablefmt="psql"))
 
+
 def print_embeddings():
     """Prints all embeddings instances"""
     with Session(engine) as session:
@@ -314,6 +320,7 @@ def print_embeddings():
         for row in all_entries:
             rows.append((row.id, row.vector, row.segment_id))
         print(tabulate(rows, headers="keys", tablefmt="psql"))
+
 
 if __name__ == "__main__":
     if "init" in sys.argv:
