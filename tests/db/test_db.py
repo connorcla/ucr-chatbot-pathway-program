@@ -1,14 +1,14 @@
-# import sys
-# import os
-# from sqlalchemy import insert, select, delete
-# from datetime import datetime, timezone
+import sys
+import os
+from sqlalchemy import insert, select, delete, inspect
+from datetime import datetime, timezone
 
-# from sqlalchemy.engine import Connection
+from sqlalchemy.engine import Connection
 
 
-# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 
-# from ucr_chatbot.db.models import *
+from ucr_chatbot.db.models import *
 
 # def test_add_new_course(db: Connection):
 #     """tests the add_new_course wrapper function"""
@@ -213,6 +213,10 @@
    
 #     assert len(result)==0
 
+
+
+
+
 # def test_delete_segments(db: Connection):
 #     """tests if a segment can be deleted from db"""
 #     stmt = delete(Segments).where(Segments.id==100, Segments.text=="hello", Segments.document_id=="slide_1.pdf")
@@ -226,6 +230,8 @@
 #     assert len(result)==0
 
 
+
+
 # def test_delete_documents(db: Connection):
 #     """tests if a document can be deleted from db"""
 #     stmt = delete(Documents).where(Documents.file_path=="slide_1.pdf", Documents.course_id==100)
@@ -237,6 +243,8 @@
 #     result = list(result)
    
 #     assert len(result)==0
+
+
 
 
 
@@ -304,7 +312,61 @@
 #     assert len(result)==0
 
 
+# def test_initialize_db():
+#   """Tests initialize_db wrapper function"""
+#   clear_db()
+#   initialize_db()
+#   inspector = inspect(engine)
+#   table_names = inspector.get_table_names()
+#   assert "Users" in table_names
+#   assert "Courses" in table_names
+#   assert "Documents" in table_names
 
+# def test_set_document_inactive(db: Connection):
+#   """Tests set_document_inactive wrapper function"""
+#   add_new_course(100, 'CS100')
+#   add_new_document(file_path="slide_1.pdf", course_id=100)
+#   set_document_inactive("slide_1.pdf")
+#   s = select(Documents).where(Documents.file_path=="slide_1.pdf", Documents.course_id==100, Documents.is_active==False)
+#   result = db.execute(s)
+#   answer = None
+#   for row in result:
+#       answer = row
+#   assert answer.is_active == False
+  
+# def test_get_active_documents(db: Connection):
+#   """Tests get_active_documents wrapper function"""
+#   add_new_document(file_path="slide_2.pdf", course_id=100)
+#   add_new_document(file_path="slide_3.pdf", course_id=100)
+#   set_document_inactive("slide_1.pdf")
+#   result = get_active_documents()
+#   print(result)
+  
+#   assert result == ['slide_2.pdf', 'slide_3.pdf']
 
+# def test_store_segment(db: Connection):
+#     """Tests the store_segment wrapper function"""
+#     segment_id = store_segment("Text string", "slide_1.pdf")
+#     s = select(Segments).where(Segments.text=="Text string", Segments.document_id=="slide_1.pdf")
+#     result = db.execute(s)
 
+#     answer = None
+#     for row in result:
+#         answer = row
+#     assert answer is not None
+#     assert answer == (segment_id, 'Text string', 'slide_1.pdf')  
 
+# def test_store_embedding(db: Connection):
+#     """Tests the store_embedding wrapper function"""
+#     segment_id = store_segment("Text string", "slide_2.pdf")
+#     store_embedding([1.0, 2.0, 3.0], segment_id)
+#     s = select(Embeddings).where(Embeddings.vector==[1.0, 2.0, 3.0], Embeddings.segment_id==segment_id)
+#     result = db.execute(s)
+
+#     answer = None
+#     for row in result:
+#         answer = row
+#     assert answer is not None
+#     assert answer == (1, [1.0, 2.0, 3.0], segment_id)
+
+ 
